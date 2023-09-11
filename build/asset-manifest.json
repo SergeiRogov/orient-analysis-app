@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/static/css/main.21866308.css",
+    "main.js": "/static/js/main.05325112.js",
+    "static/media/CyprusOrienteeringLogo.png": "/static/media/CyprusOrienteeringLogo.68e1e5667a3914f71247.png",
+    "index.html": "/index.html",
+    "main.21866308.css.map": "/static/css/main.21866308.css.map",
+    "main.05325112.js.map": "/static/js/main.05325112.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.21866308.css",
+    "static/js/main.05325112.js"
+  ]
+}

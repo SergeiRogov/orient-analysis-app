@@ -92,7 +92,7 @@ function App() {
           {splitData ? (
             <SplitContext.Provider value={ splitData }>
             <CheckBoxProvider numOfCourses={splitData ? splitData.controls?.length : 1}>
-            <Router>
+            <Router basename="/">
             <div className="upper-part">
 
               <div className="left-content">

@@ -7,7 +7,7 @@ import { divideSegment } from "../Utils/divideSegment"
 import { secondsToTime } from "../Utils/secondsToTime"
 import '../styles/styles.css';
 
-const CANVAS_HEIGHT = 650;
+const CANVAS_HEIGHT = 620;
 const CANVAS_WIDTH = 1070;
 
 const MARGIN_TOP = 30;
@@ -63,16 +63,19 @@ export const Graphs = ({ orientCourse }: Props) => {
         '#f2b705', // yellow
         '#512da8', // purple
         '#2e7d32', // green 5
+
         '#d23600', // orange
-        '#5c0002', // red
-        '#00305a', // blue
-        '#f2600c', // orange
-        '#4c1273', // purple 10
-        '#45bf55', // green
-        '#ef5350', // red
         '#04bfbf', // blue
-        '#fa5b0f', // orange
-        '#9c27b0', // purple 15
+        '#4c1273', // purple 
+        '#ef5350', // red
+        '#45bf55', // green 10
+
+        '#00305a', // blue 
+        '#f2600c', // orange
+        '#5c0002', // red 
+        '#9c27b0', // purple 
+        '#fa5b0f', // orange 15
+
         '#0eeaff', // blue
         '#36175e', // purple
         '#012840', // blue 18
@@ -119,7 +122,7 @@ export const Graphs = ({ orientCourse }: Props) => {
         ctx.stroke();
 
         ctx.strokeStyle = 'black';
-        ctx.lineWidth = 3;
+        ctx.lineWidth = 2.5;
 
         // bottom horizontal border
         ctx.beginPath();
