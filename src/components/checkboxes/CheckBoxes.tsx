@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { SplitContext, OrientCourse, Runner } from "../../App";
+import { SplitContext, OrientCourse } from "../../App";
 import { useCheckBoxContext } from './CheckboxContext';
 
 interface Props {
@@ -8,7 +8,6 @@ interface Props {
 
 export const CheckBoxes = ({ orientCourse}: Props) => {
     const splitData = useContext(SplitContext);
-    const runnersNames = splitData.runners[orientCourse.key].map((runner: Runner) => (runner.name));
 
     const { selectedRunners, setSelectedRunners } = useCheckBoxContext();
 
@@ -37,7 +36,7 @@ export const CheckBoxes = ({ orientCourse}: Props) => {
                             checked={selectedRunners[orientCourse.key].includes(runner.id)}
                             onChange={() => handleCheckboxChange(runner.id)}
                         />
-                        {runner.splits.length < splitData.controls[orientCourse.key].length 
+                        {!(/^\d{1,3}:\d{2}$/).test(runner.overall_time)
                             ? runner.place.toString().padEnd(5, ' ') + runner.overall_time.padEnd(8, ' ') + runner.name 
                             : (runner.place.toString() + ")").padEnd(5, ' ') + runner.overall_time.padEnd(8, ' ') + runner.name }
                         

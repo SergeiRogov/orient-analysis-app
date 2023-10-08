@@ -26,6 +26,15 @@ export const Graphs = ({ orientCourse }: Props) => {
 
     const { selectedRunners } = useCheckBoxContext();
 
+    let firstDNFid = 1000;
+
+    for (let i = 0; i < splitData.runners[orientCourse.key].length; i++) {
+        if (splitData.runners[orientCourse.key][i].overall_time === 'DNF') {
+            firstDNFid = i;
+            break; // Stop searching once you find the first "DNF" value
+        }
+    }
+
     const bestSplits = splitData.controls[orientCourse.key].map((_ , index) => {
         return splitData.runners[orientCourse.key].reduce((minValue, runner) => {
             const splitTime: number = runner?.splits?.[index]?.[5];
@@ -108,7 +117,7 @@ export const Graphs = ({ orientCourse }: Props) => {
         verticalLinesCoordinates.slice(1).forEach((x: number, index: number) => {
             ctx.fillText(
                 index === verticalLinesCoordinates.length - 2 ? "F" : (index + 1).toString() , 
-                x + MARGIN_LEFT - 3, 
+                index === verticalLinesCoordinates.length - 2 ? MARGIN_LEFT + graphWidth + 2 : x + MARGIN_LEFT - 3, 
                 graphHeight + MARGIN_TOP + 20);
         });
 
@@ -161,8 +170,9 @@ export const Graphs = ({ orientCourse }: Props) => {
         let Ycoordinate = 0;
         let prevYcoordinate = MARGIN_TOP;
         let curentYcoordinate = 0
-        // runners
+        let DNFrunnerIsMet = false;
         ctx.lineWidth = 2;
+        // runners
         runnersToDisplay.forEach((runner: Runner, runnerIndex) => {
             const colorIndex = runnerIndex % lineColors.length;
             ctx.strokeStyle = lineColors[colorIndex];
@@ -183,32 +193,31 @@ export const Graphs = ({ orientCourse }: Props) => {
                 ctx.fill();
             });
             // text with names
-            if (selectedRunners[orientCourse.key].length > 1 && runnersToDisplay[runnerIndex].splits.length > 0) {
+            (/^\d{1,3}:\d{2}$/).test(runner.overall_time)
+            if (selectedRunners[orientCourse.key].length > 1 && runner.splits.length > 0) {
                 ctx.fillStyle = lineColors[colorIndex];
                 ctx.font = '13px Open Sans';
                 curentYcoordinate = MARGIN_TOP + Ycoordinate;
-                if (runnerIndex > 0 && prevYcoordinate + 13 > curentYcoordinate){  
-                    curentYcoordinate = prevYcoordinate + 13
+
+                if (runner.id > firstDNFid && (/^\d{1,3}:\d{2}$/).test(runner.overall_time)){
+                    // do not modify currentYcoordinate
+                } else if (runner.id >= firstDNFid && !DNFrunnerIsMet && !(/^\d{1,3}:\d{2}$/).test(runner.overall_time)){
+                    curentYcoordinate = MARGIN_TOP + graphHeight + 12;
+                    DNFrunnerIsMet = true;
                 }
-                if (runnersToDisplay[runnerIndex].splits.length < splitData.controls[orientCourse.key].length) {
-                    curentYcoordinate = MARGIN_TOP + graphHeight;
-                    if (runnerIndex > 0 && prevYcoordinate + 12 > curentYcoordinate){  
-                        curentYcoordinate = prevYcoordinate + 12
-                    }
-                    ctx.fillText(
-                        (runnersToDisplay[runnerIndex].name).toString(), 
-                        MARGIN_LEFT + graphWidth + 7, 
-                        curentYcoordinate );
-                    prevYcoordinate = curentYcoordinate;
-                } else {
-                    ctx.fillText(
-                        (runnersToDisplay[runnerIndex].name).toString(), 
-                        MARGIN_LEFT + graphWidth + 7, 
-                        curentYcoordinate );
-                    prevYcoordinate = curentYcoordinate;
-                }
+                else if (runnerIndex > 0 && prevYcoordinate + 13 > curentYcoordinate){  
+                    // slightly shift down in order not to overlap
+                    curentYcoordinate = prevYcoordinate + 13;
+                } 
+
+                ctx.fillText(
+                    (runner.name).toString(), 
+                    MARGIN_LEFT + graphWidth + 7, 
+                    curentYcoordinate );
+                prevYcoordinate = curentYcoordinate;
             }
-        })
+            
+        });
     }
 
     return (

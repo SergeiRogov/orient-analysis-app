@@ -22,7 +22,7 @@ export interface Runner {
   bib: string;
   age_group: string;
   overall_time: string; 
-  splits: [string, number, number, number, number, number, number][]; 
+  splits: [string, number, number, number, number, number, number, string, string][]; 
   id: number;
 }
 
@@ -31,7 +31,6 @@ interface SplitInfo {
   courses: string[];
   controls: string[][];
   runners: Runner[][];
-  
 }
 
 export interface OrientCourse {
@@ -40,10 +39,15 @@ export interface OrientCourse {
 }
 
 const options: Option[] = [
-  // { label: 'Kato Drys 19 Jan 2023', value: 'Kato Drys 19 Jan 2023.html' },
-  // { label: 'Kouris Dam 20 Feb 2023', value: 'Kouris Dam 20 Feb 2023.html' },
-  // { label: 'Pikni Forest 5 Mar 2023', value: 'Pikni Forest 5 Mar 2023.html' },
+  { label: 'Kato Drys 19 Jan 2023', value: 'HTML Kato Drys 22 Jan 23 splits.html' },
+  { label: 'Kouris Dam 20 Feb 2023', value: 'HTML Kouris 26 Feb 23 Splits.html' },
+  { label: 'Pikni Forest 5 Mar 2023', value: 'HTML - Pikni Forest 05 Mar 23 Splits.html' }, 
   { label: 'Sia 26 Mar 2023', value: 'Sia Mathiatis 26 Mar 2023 splits.html' },
+  // { label: 'Sia 26 Mar 2023', value: 'HTML - Sia Mathiatis 26 Mar 2023 splits.html' },
+  { label: 'Palechori 7 May 2023', value: 'HTML - Palechori 07 May 23 splits.html' },
+  { label: 'Olympus 16 June 2023', value: 'HTML - Mt Olympus 16 June 2023 splits.html' },
+  { label: 'Troodos 16 Jul 2023', value: 'HTML Troodos 16 Jul 23 splits.html' }, 
+  { label: 'Piale Pasha 19 Aug 2023', value: 'HTML - Piale Pasha 19 Aug 23 splits.html' }, 
 ]
 
 export const SplitContext = createContext<SplitInfo>(undefined!);
@@ -53,9 +57,10 @@ function App() {
 
   const [orientEvent, setOrientEvent] = useState<string>(options[options.length - 1].value);
   const [splitData, setSplitData] = useState<SplitInfo>(undefined!);
-  const [orientCourse, setOrientCourse] = useState<OrientCourse>({name:'', key: 0});
+  const [orientCourse, setOrientCourse] = useState<OrientCourse>({name:'Blue', key: 0});
 
   useEffect(() => {
+    setIsLoading(true);
     // API Gateway endpoint 
     axios.get('https://8cb9vtn6xb.execute-api.eu-west-3.amazonaws.com/Stage1/extract-orienteering-splits', {
         params: {
@@ -79,7 +84,7 @@ function App() {
 
         <div className="loading-container" 
           style={{ display: "flex", justifyContent: "center", alignItems: "center"}}>
-          <img src={CyprusOrienteeringLogo} alt="Spinning" className="spinning-image" 
+          <img src={ CyprusOrienteeringLogo } alt="Spinning" className="spinning-image" 
             style={{
             width: "150px",
             height: "150px",
@@ -87,8 +92,9 @@ function App() {
         </div>
 
       ) : (
-        
+
         <div className="App">
+          
           {splitData ? (
             <SplitContext.Provider value={ splitData }>
             <CheckBoxProvider numOfCourses={splitData ? splitData.controls?.length : 1}>

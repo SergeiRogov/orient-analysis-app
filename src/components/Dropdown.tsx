@@ -15,7 +15,7 @@ export const Dropdown = ({options, orientEvent, setOrientEvent, orientCourse, se
 
     useEffect(() => {
         if (splitData) {
-            const defaultOrientCourse = splitData.courses.length > 0 ? {name: splitData.courses[0], key: 0} : {name: '', key: 0};
+            const defaultOrientCourse = splitData.courses.length > 0 ? {name: splitData.courses[0], key: 0} : {name: 'Blue', key: 0};
             setOrientCourse(defaultOrientCourse);
         } 
     }, [splitData])
@@ -29,14 +29,15 @@ export const Dropdown = ({options, orientEvent, setOrientEvent, orientCourse, se
 
             <select 
                 className="form-select"  
-                defaultValue={ orientEvent }
+                value={ orientEvent }
                 onChange={(event) => setOrientEvent(event.target.value)}
-                style={{ width: '130px', marginRight: '20px' }}
+                style={{ width: '160px', marginRight: '20px' }}
             >
                 {options.map((opt: Option) => (
                     <option value={ opt.value }>{ opt.label }</option>
                 ))}
             </select>
+            
             
             <div className="label">
                 <h4 className="label course" style={{ marginRight: '10px' }}>Course:</h4>
@@ -44,13 +45,13 @@ export const Dropdown = ({options, orientEvent, setOrientEvent, orientCourse, se
 
             <select 
                 className="form-select" 
-                defaultValue={ orientCourse.name }
+                value={ orientCourse.name }
                 onChange={(event) => 
                     setOrientCourse({
                         name: event.target.value, 
                         key: splitData.courses.indexOf(event.target.value)
                     })
-                } style={{ width: '130px' }}
+                } style={{ width: '160px' }}
             >
                 {splitData.courses.map((course: string) => (
                     <option key={ course }>{ course }</option>
